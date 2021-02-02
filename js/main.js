@@ -8,7 +8,7 @@
  * @param max Максимальное положительное число из диапазона, включая 0
  * @returns {string|number} целое число из диапазона "от...до"
  */
-const getRandomInt = function (min, max) {
+const getRandomInt = (min, max) => {
   if (typeof (min) !== 'number' || typeof (max) !== 'number' || min < 0 || max < 0) {
     return 'Диапазон чисел может быть только положительный, включая ноль.';
   }
@@ -18,11 +18,12 @@ const getRandomInt = function (min, max) {
 
   if (min === max) {
     return min;
-  } else {
-    return max < min
-      ? Math.floor(Math.random() * (min - max + 1)) + max
-      : Math.floor(Math.random() * (max - min + 1)) + min;
   }
+
+  return max < min
+    ? Math.floor(Math.random() * (min - max + 1)) + max
+    : Math.floor(Math.random() * (max - min + 1)) + min;
+
 }
 
 /**
@@ -33,7 +34,7 @@ const getRandomInt = function (min, max) {
  * @param precision Количество знаков после запятой
  * @returns {string} число с плавающей точкой из диапазона "от...до" с указанным "количеством знаков после запятой"
  */
-const getRandomFloat = function (min, max, precision) {
+const getRandomFloat = (min, max, precision) => {
   if (typeof (min) !== 'number' || typeof (max) !== 'number' || min < 0 || max < 0) {
     return 'Диапазон чисел может быть только положительный, включая ноль.';
   }
@@ -51,5 +52,5 @@ const getRandomFloat = function (min, max, precision) {
   return randomNumber.toFixed(precision);
 }
 
-alert(getRandomInt(1, 5));
-alert(getRandomFloat(1, 5, 3));
+getRandomInt(1, 5);
+getRandomFloat(1, 5, 3);
