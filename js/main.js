@@ -50,3 +50,6 @@ const getRandomFloat = function (min, max, precision) {
 
   return randomNumber.toFixed(precision);
 }
+
+alert(getRandomInt(1, 5));
+alert(getRandomFloat(1, 5, 3));
