@@ -1,3 +1,1 @@
-import {similarAd} from './data.js';
-
-alert(similarAd);
+import './similar-list.js';
