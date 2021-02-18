@@ -1,3 +1,5 @@
+import {changeSelectedValue} from './util.js'
+
 const adForm = document.querySelector('.ad-form');
 const types = adForm.querySelector('#type');
 const price = adForm.querySelector('#price');
@@ -22,17 +24,9 @@ adForm.addEventListener('submit', (evt) => {
 })
 
 timeInList.addEventListener('change', (evt) => {
-  for (let timeOut of timeOutList) {
-    if (evt.target.value === timeOut.value) {
-      timeOut.selected = true;
-    }
-  }
+  changeSelectedValue(evt.target.value, timeOutList);
 });
 
 timeOutList.addEventListener('change', (evt) => {
-  for (let timeIn of timeInList) {
-    if (evt.target.value === timeIn.value) {
-      timeIn.selected = true;
-    }
-  }
+  changeSelectedValue(evt.target.value, timeInList);
 });

@@ -69,4 +69,18 @@ const getRandomLengthArray = (arr) => {
   return arr.slice(0, getRandomInt(1, arr.length))
 };
 
-export {getRandomInt, getRandomFloat, getRandomArrayElement, getRandomLengthArray};
+/**
+ * Изменение выбранного значения из списка в соответствии с указаным
+ *
+ * @param value значение, в соответствии с которым изменить значение из списка
+ * @param list список значений
+ */
+const changeSelectedValue = (value, list) => {
+  for (let item of list) {
+    if (value === item.value) {
+      item.selected = true;
+    }
+  }
+}
+
+export {getRandomInt, getRandomFloat, getRandomArrayElement, getRandomLengthArray, changeSelectedValue};
