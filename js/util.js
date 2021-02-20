@@ -83,4 +83,57 @@ const changeSelectedValue = (value, list) => {
   }
 }
 
-export {getRandomInt, getRandomFloat, getRandomArrayElement, getRandomLengthArray, changeSelectedValue};
+/**
+ * Делает неактивное состояние формы, элементам проставляется свойство disabled
+ *
+ * @param collection
+ */
+const disableForm = (collection) => {
+  collection.classList.add('ad-form--disabled');
+
+  for (let element of collection) {
+    element.disabled = true;
+  }
+}
+
+/**
+ * Делает активное состояние формы, у элементов удаляется disabled
+ *
+ * @param collection
+ */
+const includeForm = (collection) => {
+  collection.classList.remove('ad-form--disabled');
+
+  for (let element of collection) {
+    element.disabled = false;
+  }
+}
+
+/**
+ * Возвращает координаты, округленные до 5 символов после запятой в виде строки
+ *
+ * @param lat
+ * @param lng
+ * @returns {string}
+ */
+const getCoordinatesString = (lat, lng) => {
+  return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+}
+
+/**
+ * Если данных нет, то блок удаляется и возвращается true, иначе false
+ *
+ * @param value проверяемое значение
+ * @param element
+ * @param selector селектор
+ * @returns {boolean}
+ */
+const isEmptyValue = (value, element, selector) => {
+  if (value === undefined) {
+    element.removeChild(element.querySelector(selector))
+    return true;
+  }
+  return false;
+}
+
+export {getRandomInt, getRandomFloat, getRandomArrayElement, getRandomLengthArray, changeSelectedValue, disableForm, includeForm, getCoordinatesString, isEmptyValue};

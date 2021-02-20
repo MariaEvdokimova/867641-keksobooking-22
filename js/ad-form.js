@@ -1,10 +1,5 @@
-import {changeSelectedValue} from './util.js'
-
-const adForm = document.querySelector('.ad-form');
-const types = adForm.querySelector('#type');
-const price = adForm.querySelector('#price');
-const timeInList = adForm.querySelector('#timein');
-const timeOutList = adForm.querySelector('#timeout');
+import {changeSelectedValue, disableForm} from './util.js';
+//import {COORDINATES} from './map-canvas.js';
 
 const TYPES_MIN_PRICE = {
   'bungalow': 0,
@@ -12,6 +7,17 @@ const TYPES_MIN_PRICE = {
   'house': 5000,
   'palace': 10000,
 }
+
+const adForm = document.querySelector('.ad-form');
+const types = adForm.querySelector('#type');
+const price = adForm.querySelector('#price');
+const timeInList = adForm.querySelector('#timein');
+const timeOutList = adForm.querySelector('#timeout');
+const address = adForm.querySelector('#address');
+
+disableForm(adForm);
+
+address.readOnly = true;
 
 types.addEventListener('change', (evt) => {
   price.placeholder = TYPES_MIN_PRICE[evt.target.value];
@@ -30,3 +36,5 @@ timeInList.addEventListener('change', (evt) => {
 timeOutList.addEventListener('change', (evt) => {
   changeSelectedValue(evt.target.value, timeInList);
 });
+
+export {adForm, address};
