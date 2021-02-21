@@ -21,7 +21,7 @@ const getRandomInt = (min, max) => {
   return max < min
     ? Math.floor(Math.random() * (min - max + 1)) + max
     : Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
 /**
  * Возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
@@ -47,7 +47,7 @@ const getRandomFloat = (min, max, precision) => {
   }
 
   return randomNumber.toFixed(precision);
-}
+};
 
 /**
  * Возвращает случайный элемент массива
@@ -81,7 +81,7 @@ const changeSelectedValue = (value, list) => {
       item.selected = true;
     }
   }
-}
+};
 
 /**
  * Делает неактивное состояние формы, элементам проставляется свойство disabled
@@ -94,7 +94,7 @@ const disableForm = (collection) => {
   for (let element of collection) {
     element.disabled = true;
   }
-}
+};
 
 /**
  * Делает активное состояние формы, у элементов удаляется disabled
@@ -107,7 +107,7 @@ const includeForm = (collection) => {
   for (let element of collection) {
     element.disabled = false;
   }
-}
+};
 
 /**
  * Возвращает координаты, округленные до 5 символов после запятой в виде строки
@@ -118,7 +118,7 @@ const includeForm = (collection) => {
  */
 const getCoordinatesString = (lat, lng) => {
   return `${lat.toFixed(5)}, ${lng.toFixed(5)}`;
-}
+};
 
 /**
  * Если данных нет, то блок удаляется и возвращается true, иначе false
@@ -134,6 +134,31 @@ const isEmptyValue = (value, element, selector) => {
     return true;
   }
   return false;
-}
+};
 
-export {getRandomInt, getRandomFloat, getRandomArrayElement, getRandomLengthArray, changeSelectedValue, disableForm, includeForm, getCoordinatesString, isEmptyValue};
+/**
+ * при выборе количества комнат вводятся ограничения на допустимые варианты выбора количества гостей
+ *
+ * @param rooms
+ * @param capacity
+ */
+const validateCapacityRooms = (rooms, capacity) => {
+  const roomValue = rooms.options[rooms.selectedIndex].value;
+  const capacityValue = capacity.options[capacity.selectedIndex].value;
+
+  if (roomValue === '100' && capacityValue !== '0') {
+    capacity.setCustomValidity('100 комнат — «не для гостей»');
+  } else if (roomValue === '3' && capacityValue === '0') {
+    capacity.setCustomValidity('3 комнаты — «для 3 гостей», «для 2 гостей» или «для 1 гостя»');
+  } else if (roomValue === '2' && (capacityValue === '0' || capacityValue === '3')) {
+    capacity.setCustomValidity('2 комнаты — «для 2 гостей» или «для 1 гостя»');
+  } else if (roomValue === '1' && capacityValue !== '1') {
+    capacity.setCustomValidity('1 комната — «для 1 гостя»');
+  } else {
+    capacity.setCustomValidity('');
+  }
+
+  capacity.reportValidity();
+};
+
+export {getRandomInt, getRandomFloat, getRandomArrayElement, getRandomLengthArray, changeSelectedValue, disableForm, includeForm, getCoordinatesString, isEmptyValue, validateCapacityRooms};
