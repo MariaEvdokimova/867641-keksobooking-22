@@ -1,7 +1,7 @@
 import {includeForm, getCoordinatesString} from './util.js';
 import {adForm, address} from './ad-form.js';
 import {mapFiltersForm} from './map-filters.js';
-import {similarAd} from './data.js';
+import {getData} from './api.js';
 import {createCardPopup} from './create-card-popup.js';
 
 const COORDINATES = {
@@ -18,7 +18,7 @@ const map = L.map('map-canvas')
   .setView({
     lat: COORDINATES.lat,
     lng: COORDINATES.lng,
-  }, 11);
+  }, 8);
 
 L.tileLayer(
   'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -46,39 +46,51 @@ const mainPinMarker = L.marker(
 
 mainPinMarker.addTo(map);
 
-address.value = getCoordinatesString(COORDINATES.lat, COORDINATES.lng);
+/**
+ * метка адреса возвращается в исходное положение
+ */
+const setMainPinMarker = () => {
+  mainPinMarker.setLatLng([COORDINATES.lat, COORDINATES.lng]);
+};
+
+const mainPinAddress = getCoordinatesString(COORDINATES.lat, COORDINATES.lng);
+address.value = mainPinAddress;
 
 mainPinMarker.on('moveend', (evt) => {
   let coordinatesMarker = evt.target.getLatLng();
   address.value = getCoordinatesString(coordinatesMarker.lat, coordinatesMarker.lng);
 });
 
-similarAd.forEach((ad) => {
-  const lat = ad.location.x;
-  const lng = ad.location.y;
+getData((ads) => {
+  ads.forEach((ad) => {
+    const lat = ad.location.lat;
+    const lng = ad.location.lng;
 
-  const icon = L.icon({
-    iconUrl: './img/pin.svg',
-    iconSize: [30, 30],
-    iconAnchor: [15, 30],
-  });
+    const icon = L.icon({
+      iconUrl: './img/pin.svg',
+      iconSize: [30, 30],
+      iconAnchor: [15, 30],
+    });
 
-  const marker = L.marker(
-    {
-      lat,
-      lng,
-    },
-    {
-      icon,
-    },
-  );
-
-  marker
-    .addTo(map)
-    .bindPopup(
-      createCardPopup(ad),
+    const marker = L.marker(
       {
-        keepInView: true,
+        lat,
+        lng,
+      },
+      {
+        icon,
       },
     );
+
+    marker
+      .addTo(map)
+      .bindPopup(
+        createCardPopup(ad),
+        {
+          keepInView: true,
+        },
+      );
+  });
 });
+
+export {mainPinAddress, setMainPinMarker};

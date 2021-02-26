@@ -1,4 +1,7 @@
 import {changeSelectedValue, disableForm, validateCapacityRooms} from './util.js';
+import {showSuccessMessage, showErrorMessage} from './message-modal.js';
+import {sendData} from './api.js';
+
 
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
@@ -74,4 +77,26 @@ capacity.addEventListener('change', () => {
   validateCapacityRooms(roomNumber, capacity);
 });
 
-export {adForm, address};
+/**
+ * отправляет данные из формы на сервер при submit
+ *
+ * @param onSuccess
+ */
+const setUserFormSubmit = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(),
+      () => showSuccessMessage(),
+      () => showErrorMessage(),
+      new FormData(evt.target),
+    );
+  });
+};
+
+const setUserFormReset = (resetUserForm) => {
+  adForm.addEventListener('reset', resetUserForm);
+};
+
+export {adForm, address, setUserFormSubmit, setUserFormReset};
