@@ -1,73 +1,4 @@
-/**
- * Возвращает случайное целое число из переданного диапазона
- * Получение случайного целого числа взято с https://developer.mozilla.org
- *
- * @param min Минимальное положительное число из диапазона, включая 0
- * @param max Максимальное положительное число из диапазона, включая 0
- * @returns {string|number} целое число из диапазона "от...до"
- */
-const getRandomInt = (min, max) => {
-  if (typeof (min) !== 'number' || typeof (max) !== 'number' || min < 0 || max < 0) {
-    return 'Диапазон чисел может быть только положительный, включая ноль.';
-  }
-
-  min = Math.ceil(min);
-  max = Math.floor(max);
-
-  if (min === max) {
-    return min;
-  }
-
-  return max < min
-    ? Math.floor(Math.random() * (min - max + 1)) + max
-    : Math.floor(Math.random() * (max - min + 1)) + min;
-};
-
-/**
- * Возвращающая случайное число с плавающей точкой из переданного диапазона включительно.
- *
- * @param min Минимальное положительное число из диапазона, включая 0
- * @param max Максимальное положительное число из диапазона, включая 0
- * @param precision Количество знаков после запятой
- * @returns {string} число с плавающей точкой из диапазона "от...до" с указанным "количеством знаков после запятой"
- */
-const getRandomFloat = (min, max, precision) => {
-  if (typeof (min) !== 'number' || typeof (max) !== 'number' || min < 0 || max < 0) {
-    return 'Диапазон чисел может быть только положительный, включая ноль.';
-  }
-
-  let randomNumber;
-
-  if (min === max) {
-    randomNumber = min;
-  } else {
-    randomNumber = max < min
-      ? Math.random() * (min - max) + max
-      : Math.random() * (max - min) + min;
-  }
-
-  return randomNumber.toFixed(precision);
-};
-
-/**
- * Возвращает случайный элемент массива
- *
- * @param elements Массив
- * @returns {*}
- */
-const getRandomArrayElement = (elements) => {
-  return elements[getRandomInt(0, elements.length - 1)];
-};
-
-/**
- * Возвращает массив случайной длинны
- *
- * @param arr Массив
- * @returns {any[] | BigUint64Array | Uint8ClampedArray | Uint32Array | Blob | Int16Array | Float64Array | SharedArrayBuffer | string | Uint16Array | ArrayBuffer | Int32Array | Float32Array | BigInt64Array | Uint8Array | Int8Array}
- */
-const getRandomLengthArray = (arr) => {
-  return arr.slice(0, getRandomInt(1, arr.length))
-};
+const ALERT_SHOW_TIME = 5000;
 
 /**
  * Изменение выбранного значения из списка в соответствии с указаным
@@ -161,4 +92,69 @@ const validateCapacityRooms = (rooms, capacity) => {
   capacity.reportValidity();
 };
 
-export {getRandomInt, getRandomFloat, getRandomArrayElement, getRandomLengthArray, changeSelectedValue, disableForm, includeForm, getCoordinatesString, isEmptyValue, validateCapacityRooms};
+/**
+ * Проверяет была ли нажата кнопка Esc
+ *
+ * @param evt
+ * @returns {boolean}
+ */
+const isEscEvent = (evt) => {
+  return evt.key === 'Escape' || evt.key === 'Esc';
+};
+
+/**
+ * создает модальное окно с сообщением
+ *
+ * @param container
+ * @param button
+ */
+const createMessageModal = (container, button = undefined) => {
+  const main = document.querySelector('main');
+
+  main.append(container);
+
+  document.addEventListener('keydown', (evt) => {
+    if (isEscEvent(evt)) {
+      evt.preventDefault();
+      container.remove();
+    }
+  }, {once: true});
+
+  document.addEventListener('click', () => {
+    container.remove();
+  }, {once: true});
+
+  if (button !== undefined) {
+    button.addEventListener('click', () => {
+      container.remove();
+    }, {once: true});
+  }
+};
+
+/**
+ * показывает сообщение об ошибке
+ *
+ * @param message
+ */
+const showAlert = (message) => {
+  const alertContainer = document.createElement('div');
+  alertContainer.style.zIndex = 100;
+  alertContainer.style.position = 'absolute';
+  alertContainer.style.left = 0;
+  alertContainer.style.top = 0;
+  alertContainer.style.right = 0;
+  alertContainer.style.padding = '10px 3px';
+  alertContainer.style.fontSize = '30px';
+  alertContainer.style.textAlign = 'center';
+  alertContainer.style.backgroundColor = 'red';
+
+  alertContainer.textContent = message;
+
+  document.body.append(alertContainer);
+
+  setTimeout(() => {
+    alertContainer.remove();
+  }, ALERT_SHOW_TIME);
+}
+
+export {changeSelectedValue, disableForm, includeForm, getCoordinatesString, isEmptyValue, validateCapacityRooms, createMessageModal, showAlert};
