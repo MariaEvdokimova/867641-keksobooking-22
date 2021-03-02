@@ -9,7 +9,7 @@ const resetForm = () => {
   setMainPinMarker();
   mapFiltersForm.reset();
   adForm.reset();
-  address.value = mainPinAddress;
+  address.defaultValue = mainPinAddress;
 };
 
 export {resetForm};
