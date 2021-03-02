@@ -1,8 +1,9 @@
 import {includeForm, getCoordinatesString} from './util.js';
 import {adForm, address} from './ad-form.js';
-import {mapFiltersForm} from './map-filters.js';
-import {getData} from './api.js';
+import {mapFiltersForm, filterAds, housingFeatures} from './map-filters.js';
 import {createCardPopup} from './create-card-popup.js';
+
+const SIMILAR_AD_COUNT = 10;
 
 const COORDINATES = {
   lat: 35.6895000,
@@ -13,7 +14,6 @@ const COORDINATES = {
 const map = L.map('map-canvas')
   .on('load', () => {
     includeForm(adForm);
-    includeForm(mapFiltersForm);
   })
   .setView({
     lat: COORDINATES.lat,
@@ -61,36 +61,88 @@ mainPinMarker.on('moveend', (evt) => {
   address.value = getCoordinatesString(coordinatesMarker.lat, coordinatesMarker.lng);
 });
 
-getData((ads) => {
-  ads.forEach((ad) => {
-    const lat = ad.location.lat;
-    const lng = ad.location.lng;
+const markers = [];
 
-    const icon = L.icon({
-      iconUrl: './img/pin.svg',
-      iconSize: [30, 30],
-      iconAnchor: [15, 30],
-    });
+/**
+ * Отрисовывает похожие объявления
+ * @param similarAds
+ */
+const renderSimilarList = (similarAds) => {
+  const featuresSelected = housingFeatures.querySelectorAll('input[type="checkbox"]:checked');
 
-    const marker = L.marker(
-      {
-        lat,
-        lng,
-      },
-      {
-        icon,
-      },
-    );
+  if (markers.length !== 0) {
+    markers.forEach((marker) => marker.remove());
+  }
 
-    marker
-      .addTo(map)
-      .bindPopup(
-        createCardPopup(ad),
+  /**
+   * Возвращает рейтинг по количеству удобств
+   * @param ad
+   * @returns {number}
+   */
+  const getFeaturesRunk = (ad) => {
+    let features = ad.offer.features;
+    let runk = 0;
+
+    for (let feature of featuresSelected) {
+      if (features.includes(feature.value)) {
+        runk++;
+      }
+    }
+    return runk;
+  };
+
+  /**
+   * Сортирует массив от большего значения к меньшему
+   *
+   * @param adA
+   * @param adB
+   * @returns {number}
+   */
+  const sortAds = (adA, adB) => {
+    const runkA = getFeaturesRunk(adA);
+    const runkB = getFeaturesRunk(adB);
+
+    return runkB - runkA;
+  };
+
+  similarAds
+    .slice()
+    .filter(filterAds)
+    .sort(sortAds)
+    .slice(0, SIMILAR_AD_COUNT)
+    .forEach((ad) => {
+      const lat = ad.location.lat;
+      const lng = ad.location.lng;
+
+      const icon = L.icon({
+        iconUrl: './img/pin.svg',
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+      });
+
+      const marker = L.marker(
         {
-          keepInView: true,
+          lat,
+          lng,
+        },
+        {
+          icon,
         },
       );
-  });
-});
 
-export {mainPinAddress, setMainPinMarker};
+      markers.push(marker);
+
+      marker
+        .addTo(map)
+        .bindPopup(
+          createCardPopup(ad),
+          {
+            keepInView: true,
+          },
+        );
+    });
+
+  includeForm(mapFiltersForm);
+};
+
+export {mainPinAddress, setMainPinMarker, renderSimilarList};
