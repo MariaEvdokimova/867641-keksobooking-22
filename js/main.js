@@ -4,9 +4,22 @@ import {changeMapFiltersForm} from'./map-filters.js';
 import {renderSimilarList} from './map-canvas.js';
 import {getData} from './api.js';
 
+const RERENDER_DELAY = 500;
+
+const debounce = (cb, timeout) => {
+  let timer;
+  return () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => cb.apply(this), timeout);
+  };
+};
+
 getData((ads) => {
   renderSimilarList(ads);
-  changeMapFiltersForm(() => renderSimilarList(ads));
+  changeMapFiltersForm(debounce(
+    () => renderSimilarList(ads),
+    RERENDER_DELAY,
+  ));
 });
 
 setUserFormSubmit(resetForm);
