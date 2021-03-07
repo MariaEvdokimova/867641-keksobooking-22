@@ -1,5 +1,6 @@
-import {adForm, address} from './ad-form.js';
-import {mainPinAddress, setMainPinMarker} from './map-canvas.js';
+import {adForm} from './ad-form.js';
+import {previewAvatar, previewPhoto} from './ad-form-images.js';
+import {setMainPinMarker} from './map-canvas.js';
 import {mapFiltersForm} from './map-filters.js';
 
 /**
@@ -9,7 +10,11 @@ const resetForm = () => {
   setMainPinMarker();
   mapFiltersForm.reset();
   adForm.reset();
-  address.defaultValue = mainPinAddress;
+
+  previewAvatar.src = 'img/muffin-grey.svg';
+  if(previewPhoto.firstChild) {
+    previewPhoto.removeChild(previewPhoto.firstChild);
+  }
 };
 
 export {resetForm};

@@ -3,6 +3,7 @@ import {resetForm} from './reset-form.js';
 import {changeMapFiltersForm} from'./map-filters.js';
 import {renderSimilarList} from './map-canvas.js';
 import {getData} from './api.js';
+import './ad-form-images.js';
 
 const RERENDER_DELAY = 500;
 

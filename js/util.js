@@ -1,4 +1,5 @@
 const ALERT_SHOW_TIME = 5000;
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 /**
  * Изменение выбранного значения из списка в соответствии с указаным
@@ -157,4 +158,29 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 }
 
-export {changeSelectedValue, disableForm, includeForm, getCoordinatesString, isEmptyValue, validateCapacityRooms, createMessageModal, showAlert};
+/**
+ * Загрузка изображений на страницу
+ *
+ * @param fileChooser
+ * @param preview
+ */
+const postingPhoto = (fileChooser, preview) => {
+  const file = fileChooser.files[0];
+  const fileName = file.name.toLowerCase();
+
+  const matches = FILE_TYPES.some((type) => {
+    return fileName.endsWith(type);
+  });
+
+  if (matches) {
+    const reader = new FileReader();
+
+    reader.addEventListener('load', () => {
+      preview.src = reader.result;
+    });
+
+    reader.readAsDataURL(file);
+  }
+};
+
+export {changeSelectedValue, disableForm, includeForm, getCoordinatesString, isEmptyValue, validateCapacityRooms, createMessageModal, showAlert, postingPhoto};
