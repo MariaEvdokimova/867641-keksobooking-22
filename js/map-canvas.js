@@ -54,7 +54,7 @@ const setMainPinMarker = () => {
 };
 
 const mainPinAddress = getCoordinatesString(COORDINATES.lat, COORDINATES.lng);
-address.value = mainPinAddress;
+address.defaultValue = mainPinAddress;
 
 mainPinMarker.on('moveend', (evt) => {
   let coordinatesMarker = evt.target.getLatLng();
