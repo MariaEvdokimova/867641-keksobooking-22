@@ -1,3 +1,5 @@
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import {includeForm, getCoordinatesString} from './util.js';
 import {adForm, address} from './ad-form.js';
 import {mapFiltersForm, filterAds, housingFeatures} from './map-filters.js';
@@ -10,7 +12,6 @@ const COORDINATES = {
   lng: 139.6917100,
 }
 
-/* global L:readonly */
 const map = L.map('map-canvas')
   .on('load', () => {
     includeForm(adForm);
