@@ -6,6 +6,7 @@ import {sendData} from './api.js';
 const MIN_TITLE_LENGTH = 30;
 const MAX_TITLE_LENGTH = 100;
 const MAX_PRICE = 1000000;
+const DEFAULT_MIN_PRICE = 1000;
 
 const TYPES_MIN_PRICE = {
   'bungalow': 0,
@@ -57,6 +58,8 @@ price.addEventListener('input', () => {
   price.reportValidity();
 });
 
+price.placeholder = DEFAULT_MIN_PRICE;
+
 types.addEventListener('change', (evt) => {
   price.placeholder = TYPES_MIN_PRICE[evt.target.value];
 });
@@ -99,4 +102,4 @@ const setUserFormReset = (resetUserForm) => {
   adForm.addEventListener('reset', resetUserForm);
 };
 
-export {adForm, address, setUserFormSubmit, setUserFormReset};
+export {adForm, address, price, DEFAULT_MIN_PRICE, setUserFormSubmit, setUserFormReset};

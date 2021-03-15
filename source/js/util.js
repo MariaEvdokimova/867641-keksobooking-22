@@ -139,11 +139,11 @@ const createMessageModal = (container, button = undefined) => {
  */
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
-  alertContainer.style.zIndex = 100;
+  alertContainer.style.zIndex = '100';
   alertContainer.style.position = 'absolute';
-  alertContainer.style.left = 0;
-  alertContainer.style.top = 0;
-  alertContainer.style.right = 0;
+  alertContainer.style.left = '0';
+  alertContainer.style.top = '0';
+  alertContainer.style.right = '0';
   alertContainer.style.padding = '10px 3px';
   alertContainer.style.fontSize = '30px';
   alertContainer.style.textAlign = 'center';
@@ -183,4 +183,22 @@ const postingPhoto = (fileChooser, preview) => {
   }
 };
 
-export {changeSelectedValue, disableForm, includeForm, getCoordinatesString, isEmptyValue, validateCapacityRooms, createMessageModal, showAlert, postingPhoto};
+/**
+ * Возвращает соответствие по количеству удобств
+ * @param ad
+ * @param featuresSelected
+ * @returns {number}
+ */
+const getFeaturesRunk = (ad, featuresSelected) => {
+  let features = ad.offer.features;
+  let runk = 0;
+
+  for (let feature of featuresSelected) {
+    if (features.includes(feature.value)) {
+      runk++;
+    }
+  }
+  return runk;
+};
+
+export {changeSelectedValue, disableForm, includeForm, getCoordinatesString, isEmptyValue, validateCapacityRooms, createMessageModal, showAlert, postingPhoto, getFeaturesRunk};

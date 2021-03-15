@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {includeForm, getCoordinatesString} from './util.js';
 import {adForm, address} from './ad-form.js';
-import {mapFiltersForm, filterAds, housingFeatures} from './map-filters.js';
+import {mapFiltersForm, filterAds} from './map-filters.js';
 import {createCardPopup} from './create-card-popup.js';
 
 const SIMILAR_AD_COUNT = 10;
@@ -69,47 +69,13 @@ const markers = [];
  * @param similarAds
  */
 const renderSimilarList = (similarAds) => {
-  const featuresSelected = housingFeatures.querySelectorAll('input[type="checkbox"]:checked');
-
   if (markers.length !== 0) {
     markers.forEach((marker) => marker.remove());
   }
 
-  /**
-   * Возвращает рейтинг по количеству удобств
-   * @param ad
-   * @returns {number}
-   */
-  const getFeaturesRunk = (ad) => {
-    let features = ad.offer.features;
-    let runk = 0;
-
-    for (let feature of featuresSelected) {
-      if (features.includes(feature.value)) {
-        runk++;
-      }
-    }
-    return runk;
-  };
-
-  /**
-   * Сортирует массив от большего значения к меньшему
-   *
-   * @param adA
-   * @param adB
-   * @returns {number}
-   */
-  const sortAds = (adA, adB) => {
-    const runkA = getFeaturesRunk(adA);
-    const runkB = getFeaturesRunk(adB);
-
-    return runkB - runkA;
-  };
-
   similarAds
     .slice()
     .filter(filterAds)
-    .sort(sortAds)
     .slice(0, SIMILAR_AD_COUNT)
     .forEach((ad) => {
       const lat = ad.location.lat;

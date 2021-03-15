@@ -6,7 +6,7 @@ import {showAlert} from './util.js';
  */
 const getData = (onSuccess) => {
   fetch('https://22.javascript.pages.academy/keksobooking/data')
-    .then((responce) => responce.json())
+    .then((data) => data.json())
     .then((ads) => {
       onSuccess(ads);
     })
@@ -30,8 +30,8 @@ const sendData = (onSuccess, successMessage, failMessage, body) => {
       body,
     },
   )
-    .then ((response) => {
-      if (response.ok) {
+    .then ((result) => {
+      if (result.ok) {
         successMessage();
         onSuccess();
       } else {
